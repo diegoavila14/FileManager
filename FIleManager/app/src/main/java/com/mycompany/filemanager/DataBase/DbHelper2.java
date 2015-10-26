@@ -7,21 +7,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Diego Avila on 25-10-2015.
  */
-public class DbHelper extends SQLiteOpenHelper {
+public class DbHelper2 extends SQLiteOpenHelper {
 
-    private static final  String DB_NAME = "folders.sqlite";
+    private static final  String DB_NAME = "Documentos.sqlite";
     private static final int DB_SCHEME_VERSION = 1;
 
 
 
-    public DbHelper(Context context) {
+    public DbHelper2(Context context) {
         super(context, DB_NAME, null, DB_SCHEME_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL(DataBaseManager.CREATE_TABLE);
+        db.execSQL(DataBaseManager2.CREATE_TABLE);
 
     }
 

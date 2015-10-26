@@ -4,13 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 
-import com.mycompany.filemanager.Folder;
-import com.mycompany.filemanager.R;
+import com.mycompany.filemanager.General.Folder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Diego Avila on 25-10-2015.
@@ -21,7 +18,7 @@ public class DataBaseManager {
 
     public static final String CN_ID = "_id";
     public static final String CN_ID_WEB = "id_web";
-    public static final String CN_NAME = "title";
+    public static final String CN_NAME = "folder_name";
 
     public static final String CREATE_TABLE = "create table " + TABLE_NAME + " ("
             + CN_ID + " integer primary key autoincrement,"
@@ -73,7 +70,7 @@ public class DataBaseManager {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Folder folder = new Folder(cursor.getString(2));
+                Folder folder = new Folder(cursor.getString(2),cursor.getInt(1));
 
                 folders.add(folder);
 

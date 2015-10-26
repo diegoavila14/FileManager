@@ -1,10 +1,11 @@
-package com.mycompany.filemanager;
+package com.mycompany.filemanager.General;
 
 import android.content.Context;
 
 import com.mycompany.filemanager.DataBase.DataBaseManager;
+import com.mycompany.filemanager.DataBase.DataBaseManager2;
+import com.mycompany.filemanager.mainActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,13 +15,21 @@ public class FileManagerBackend {
 
     private static FileManagerBackend INSTANCE;
     private DataBaseManager dbManager;
+    private DataBaseManager2 dbManager2;
+    private List<Folder> folders;
 
     private FileManagerBackend(Context c)
     {
         dbManager = new DataBaseManager(c);
+        dbManager2 = new DataBaseManager2(c);
 
         //SOLO PARA PRUEBA
         prueba();
+    }
+
+    public Folder getFolder(int index)
+    {
+        return folders.get(index);
     }
 
     //Patrón singleton para tener acceso global a la instancia
@@ -35,12 +44,20 @@ public class FileManagerBackend {
 
     public List<Folder> getFolders()
     {
-        return dbManager.getDBFolders();
+        folders = dbManager.getDBFolders();
+        return folders;
+    }
+
+    public List<FileM> getFiles(int id_folder)
+    {
+        return dbManager2.getDBFiles(id_folder);
     }
 
     public void prueba()
     {
         dbManager.insertDB("HOLA",0);
         dbManager.insertDB("CHAO",1);
+
+        dbManager2.insertDB(0,0,"a","a");
     }
 }

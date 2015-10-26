@@ -1,7 +1,6 @@
 package com.mycompany.filemanager;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,24 +11,21 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.mycompany.filemanager.General.CustomGrid;
+import com.mycompany.filemanager.General.CustomGridFiles;
 import com.mycompany.filemanager.General.FileManagerBackend;
-import com.mycompany.filemanager.General.Folder;
 
-public class mainActivity extends Activity {
-
-    private static Context context;
-    private FileManagerBackend fileManagerBackend;
+public class DisplayFolderActivity extends Activity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_display_folder);
 
-        mainActivity.context = getApplicationContext();
-        fileManagerBackend = FileManagerBackend.getInstance();
+        Intent intent = getIntent();
+        int id_folder = intent.getIntExtra("id_folder",-1);
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        CustomGrid adapter = new CustomGrid(mainActivity.this, fileManagerBackend.getFolders() );
+        CustomGridFiles adapter = new CustomGridFiles(DisplayFolderActivity.this, FileManagerBackend.getInstance().getFiles(id_folder) );
         gridview.setAdapter(adapter);
 
         //gridview.setAdapter(new CustomGrid(this));
@@ -37,15 +33,9 @@ public class mainActivity extends Activity {
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(mainActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
-
-                Folder folder = FileManagerBackend.getInstance().getFolder(position);
-
-                Intent intent = new Intent(mainActivity.getAppContext(), DisplayFolderActivity.class);
-                intent.putExtra("id_folder",folder.getId());
-                startActivity(intent);
+                                    int position, long id)
+            {
+                Toast.makeText(DisplayFolderActivity.this, "" + position,Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -53,7 +43,7 @@ public class mainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_file_browser, menu);
+        getMenuInflater().inflate(R.menu.menu_dispaly_folder, menu);
         return true;
     }
 
@@ -70,9 +60,5 @@ public class mainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public static Context getAppContext() {
-        return mainActivity.context;
     }
 }
