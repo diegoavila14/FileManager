@@ -41,10 +41,10 @@ public class mainActivity extends Activity {
                 Toast.makeText(mainActivity.this, "" + position,
                         Toast.LENGTH_SHORT).show();
 
-                Folder folder = FileManagerBackend.getInstance().getFolder(position);
+                //Folder folder = FileManagerBackend.getInstance().getFolder(position);
 
                 Intent intent = new Intent(mainActivity.getAppContext(), DisplayFolderActivity.class);
-                intent.putExtra("id_folder",folder.getId());
+                intent.putExtra("folder_position",position);
                 startActivity(intent);
             }
         });

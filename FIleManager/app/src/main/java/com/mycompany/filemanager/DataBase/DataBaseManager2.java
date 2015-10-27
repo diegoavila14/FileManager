@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 
 import com.mycompany.filemanager.General.FileM;
+import com.mycompany.filemanager.General.Tool;
 
 import java.util.ArrayList;
 
@@ -21,13 +23,17 @@ public class DataBaseManager2 {
     public static final String CN_ID_WEB_FOLDER = "id_web_folder";
     public static  final String CN_FILE_NAME = "filename";
     public static final String CN_FOLDER_PATH = "folder_path";
+    public static final String CN_TITLE = "title";
+    public static final String CN_IS_IMAGE = "is_image";
 
     public static final String CREATE_TABLE = "create table " + TABLE_NAME + " ("
             + CN_ID + " integer primary key autoincrement,"
             + CN_ID_DOC + " integer unique,"
             + CN_ID_WEB_FOLDER + " integer,"
             + CN_FOLDER_PATH + " text not null,"
-            + CN_FILE_NAME + " text not null);";
+            + CN_FILE_NAME + " text not null,"
+            + CN_TITLE + " text,"
+            + CN_IS_IMAGE + " integer not null);";
 
     private DbHelper2 helper;
     private SQLiteDatabase db;
@@ -37,13 +43,15 @@ public class DataBaseManager2 {
         db = helper.getWritableDatabase();
     }
 
-    public ContentValues generateCV(int id_doc, int id_web_folder, String folder_path, String filename)
+    public ContentValues generateCV(int id_doc, int id_web_folder, String folder_path, String filename,String title, int is_image)
     {
         ContentValues contentValues = new ContentValues();
         contentValues.put(CN_ID_DOC , id_doc);
         contentValues.put(CN_ID_WEB_FOLDER , id_web_folder);
         contentValues.put(CN_FOLDER_PATH, folder_path);
         contentValues.put(CN_FILE_NAME, filename);
+        contentValues.put(CN_TITLE,title);
+        contentValues.put(CN_IS_IMAGE, is_image);
 
         return contentValues;
     }
@@ -53,9 +61,9 @@ public class DataBaseManager2 {
     Se usa insertWithOnConflict para que cuando se inserte un contenido que ya existe este se actualice y
     no se duplique.
     */
-    public void insertDB(int id_doc, int id_web_folder, String folder_path, String filename)
+    public void insertDB(int id_doc, int id_web_folder, String folder_path, String filename, String title, int is_image)
     {
-        db.insertWithOnConflict(TABLE_NAME, null, generateCV(id_doc, id_web_folder, folder_path, filename), SQLiteDatabase.CONFLICT_REPLACE);
+        db.insertWithOnConflict(TABLE_NAME, null, generateCV(id_doc, id_web_folder, folder_path, filename, title, is_image), SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public void deleteDB(String id_web)
@@ -75,7 +83,13 @@ public class DataBaseManager2 {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                FileM fileM = new FileM(cursor.getString(4));
+                FileM fileM = new FileM(cursor.getString(5));
+                String path = cursor.getString(3);
+                String filename = cursor.getString(4);
+
+                Bitmap b = Tool.loadImageFromStorage(cursor.getString(4), cursor.getString(3)); //(filename, folder_path)
+                fileM.setImage(b);
+                fileM.setIs_image(cursor.getInt(6));
 
                 files.add(fileM);
 

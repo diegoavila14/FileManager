@@ -1,6 +1,7 @@
 package com.mycompany.filemanager;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,20 +13,30 @@ import android.widget.Toast;
 
 import com.mycompany.filemanager.General.CustomGrid;
 import com.mycompany.filemanager.General.CustomGridFiles;
+import com.mycompany.filemanager.General.FileM;
 import com.mycompany.filemanager.General.FileManagerBackend;
+import com.mycompany.filemanager.General.Folder;
 
 public class DisplayFolderActivity extends Activity {
+
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_folder);
 
+        DisplayFolderActivity.context = getApplicationContext();
+
         Intent intent = getIntent();
-        int id_folder = intent.getIntExtra("id_folder",-1);
+        int folder_position = intent.getIntExtra("folder_position",-1);
+
+        Folder folder = FileManagerBackend.getInstance().getFolder(folder_position);
+
+        setTitle(folder.getName());
 
         GridView gridview = (GridView) findViewById(R.id.gridview);
-        CustomGridFiles adapter = new CustomGridFiles(DisplayFolderActivity.this, FileManagerBackend.getInstance().getFiles(id_folder) );
+        CustomGridFiles adapter = new CustomGridFiles(DisplayFolderActivity.this, FileManagerBackend.getInstance().getFiles(folder.getId()) );
         gridview.setAdapter(adapter);
 
         //gridview.setAdapter(new CustomGrid(this));
@@ -36,6 +47,22 @@ public class DisplayFolderActivity extends Activity {
                                     int position, long id)
             {
                 Toast.makeText(DisplayFolderActivity.this, "" + position,Toast.LENGTH_SHORT).show();
+
+                FileM fileM = FileManagerBackend.getInstance().getFileM(position);
+
+                Intent intent;
+
+                if (fileM.getIs_image() == 1)
+                {
+                    intent = new Intent(DisplayFolderActivity.getAppContext() , DisplayImageActivity.class);
+                }
+                else
+                {
+                    intent = new Intent(DisplayFolderActivity.getAppContext() , DisplayPDFActivity.class);
+                }
+
+                intent.putExtra("position",position);
+                startActivity(intent);
             }
         });
     }
@@ -60,5 +87,8 @@ public class DisplayFolderActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public static Context getAppContext() {
+        return DisplayFolderActivity.context;
     }
 }

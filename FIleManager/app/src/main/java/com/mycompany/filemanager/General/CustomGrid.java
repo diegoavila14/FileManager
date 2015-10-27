@@ -47,7 +47,7 @@ public class CustomGrid extends BaseAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             //imageView = new ImageView(mContext);
-            grid = new View(mContext);
+            //grid = new View(mContext);
             grid = inflater.inflate(R.layout.grid_single, null);
             TextView textView = (TextView) grid.findViewById(R.id.grid_text);
             ImageView imageView = (ImageView)grid.findViewById(R.id.grid_image);
@@ -58,7 +58,7 @@ public class CustomGrid extends BaseAdapter {
             final Folder folder = folders.get(position);
             textView.setText(folder.getName());
         } else {
-            grid = (View) convertView;
+            grid = convertView;
         }
 
         //imageView.setImageResource(mThumbIds[position]);

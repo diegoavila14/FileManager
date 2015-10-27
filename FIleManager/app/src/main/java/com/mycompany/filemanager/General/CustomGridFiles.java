@@ -47,18 +47,18 @@ public class CustomGridFiles extends BaseAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             //imageView = new ImageView(mContext);
-            grid = new View(mContext);
+            //grid = new View(mContext);
             grid = inflater.inflate(R.layout.grid_single, null);
             TextView textView = (TextView) grid.findViewById(R.id.grid_text);
             ImageView imageView = (ImageView)grid.findViewById(R.id.grid_image);
             grid.setLayoutParams(new GridView.LayoutParams(170, 170));
             //grid.setScaleType(ImageView.ScaleType.CENTER_CROP);
             grid.setPadding(8, 8, 8, 8);
-            imageView.setImageResource(R.drawable.file_icon);
-            //final Folder folder = folders.get(position);
-            //textView.setText(folder.getName());
+            imageView.setImageResource(R.drawable.image_icon);
+            final FileM fileM = files.get(position);
+            textView.setText(fileM.getName());
         } else {
-            grid = (View) convertView;
+            grid = convertView;
         }
 
         //imageView.setImageResource(mThumbIds[position]);

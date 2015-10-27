@@ -24,6 +24,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.mycompany.filemanager.mainActivity" />
         </activity>
+        <activity
+            android:name=".DisplayPDFActivity"
+            android:label="@string/title_activity_display_pdf"
+            android:parentActivityName=".DisplayFolderActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mycompany.filemanager.DisplayFolderActivity" />
+        </activity>
+        <activity
+            android:name=".DisplayImageActivity"
+            android:label="@string/title_activity_display_image"
+            android:parentActivityName=".DisplayFolderActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.mycompany.filemanager.DisplayFolderActivity" />
+        </activity>
     </application>
 
 </manifest>
