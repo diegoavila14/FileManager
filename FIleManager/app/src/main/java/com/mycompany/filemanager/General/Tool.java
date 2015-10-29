@@ -20,7 +20,7 @@ public class Tool {
     public static String saveToInternalStorage(Bitmap bitmapImage, String filename){
         ContextWrapper cw = new ContextWrapper(mainActivity.getAppContext());
         // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File directory = cw.getDir("docDir", Context.MODE_PRIVATE);
         // Create imageDir
         File mypath=new File(directory, filename+".jpg");
 
@@ -42,7 +42,7 @@ public class Tool {
     {
         Bitmap b = null;
         try {
-            File f=new File(folder_path, filename);
+            File f=new File(folder_path, filename+".jpg");
             b = BitmapFactory.decodeStream(new FileInputStream(f));
         }
         catch (FileNotFoundException e)

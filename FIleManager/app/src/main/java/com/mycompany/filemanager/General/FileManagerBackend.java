@@ -9,7 +9,10 @@ import com.mycompany.filemanager.DataBase.DataBaseManager2;
 import com.mycompany.filemanager.mainActivity;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+
+import cl.medapp.medappwebapi.Document;
 
 /**
  * Created by Diego Avila on 25-10-2015.
@@ -65,8 +68,8 @@ public class FileManagerBackend {
 
     public void prueba()
     {
-        dbManager.insertDB("HOLA",0);
-        dbManager.insertDB("CHAO", 1);
+        dbManager.insertDB("Tareas",0);
+        dbManager.insertDB("Materiales", 1);
 
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = Bitmap.createBitmap(100, 100, conf);
@@ -91,5 +94,19 @@ public class FileManagerBackend {
         String path3 = Tool.saveToInternalStorage(bitmap3,"hola3");
 
         dbManager2.insertDB(2, 1, path3, "hola3.jpg", "IMAGE_3",1);
+    }
+
+    public void proccessFolder(cl.medapp.medappwebapi.Folder folder)
+    {
+        int id_folder = 100 + folder.getName().length();
+        dbManager.insertDB(folder.getName(),id_folder);
+
+        for (Document doc: folder.getDocuments()) {
+            Bitmap bitmap = doc.getImage();
+            int id_doc = 100+doc.getName().length();
+            String filename = Integer.toString(id_doc)+"_doc";
+            String path = Tool.saveToInternalStorage(bitmap,filename);
+            dbManager2.insertDB(id_doc,id_folder,path,filename,doc.getName(),1);
+        }
     }
 }

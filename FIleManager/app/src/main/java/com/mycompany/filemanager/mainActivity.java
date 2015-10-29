@@ -9,21 +9,38 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mycompany.filemanager.General.CustomGrid;
 import com.mycompany.filemanager.General.FileManagerBackend;
-import com.mycompany.filemanager.General.Folder;
+
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import cl.medapp.medappwebapi.Folder;
+import cl.medapp.medappwebapi.MedappApi;
+import cl.medapp.medappwebapi.OnTaskCompleted;
+import cl.medapp.medappwebapi.Patient;
 
 public class mainActivity extends Activity {
 
     private static Context context;
     private FileManagerBackend fileManagerBackend;
+    private MedappApi api;
+
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        api = new MedappApi(this);
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
 
         mainActivity.context = getApplicationContext();
         fileManagerBackend = FileManagerBackend.getInstance();
@@ -44,7 +61,7 @@ public class mainActivity extends Activity {
                 //Folder folder = FileManagerBackend.getInstance().getFolder(position);
 
                 Intent intent = new Intent(mainActivity.getAppContext(), DisplayFolderActivity.class);
-                intent.putExtra("folder_position",position);
+                intent.putExtra("folder_position", position);
                 startActivity(intent);
             }
         });
@@ -65,7 +82,38 @@ public class mainActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_update) {
+            progressBar.setVisibility(View.VISIBLE);
+
+            api.getPatientHospitalization(new OnTaskCompleted<Patient>() {
+                @Override
+                public void onTaskCompleted(Patient patient) {
+                    //TODO sincronizacion de documentos
+                    api.getPatientFolders(patient, new OnTaskCompleted<List<Folder>>() {
+                        @Override
+                        public void onTaskCompleted(List<Folder> folders) {
+                            int n_documents = 0;
+                            for (Folder folder : folders ) {
+                                n_documents += folder.getDocuments().size();
+                                FileManagerBackend.getInstance().proccessFolder(folder);
+                            }
+                            String msg;
+                            switch (n_documents) {
+                                case 1:
+                                    msg = "1 documento actualizado";
+                                    break;
+                                default:
+                                    msg = n_documents+" documentos actualizados";
+                            }
+                            GridView gridview = (GridView) findViewById(R.id.gridview);
+                            CustomGrid adapter = new CustomGrid(mainActivity.this, fileManagerBackend.getFolders() );
+                            gridview.setAdapter(adapter);
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(mainActivity.getAppContext(),msg,Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
             return true;
         }
 
