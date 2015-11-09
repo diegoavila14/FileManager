@@ -51,7 +51,7 @@ public class CustomGrid extends BaseAdapter {
             grid = inflater.inflate(R.layout.grid_single, null);
             TextView textView = (TextView) grid.findViewById(R.id.grid_text);
             ImageView imageView = (ImageView)grid.findViewById(R.id.grid_image);
-            grid.setLayoutParams(new GridView.LayoutParams(170, 170));
+            grid.setLayoutParams(new GridView.LayoutParams(250, 210));
             //grid.setScaleType(ImageView.ScaleType.CENTER_CROP);
             grid.setPadding(8, 8, 8, 8);
             imageView.setImageResource(R.drawable.folder);

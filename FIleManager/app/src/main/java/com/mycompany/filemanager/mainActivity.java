@@ -88,7 +88,7 @@ public class mainActivity extends Activity {
             api.getPatientHospitalization(new OnTaskCompleted<Patient>() {
                 @Override
                 public void onTaskCompleted(Patient patient) {
-                    //TODO sincronizacion de documentos
+
                     api.getPatientFolders(patient, new OnTaskCompleted<List<Folder>>() {
                         @Override
                         public void onTaskCompleted(List<Folder> folders) {

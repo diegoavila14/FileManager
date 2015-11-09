@@ -68,7 +68,7 @@ public class FileManagerBackend {
 
     public void prueba()
     {
-        dbManager.insertDB("Tareas",0);
+        dbManager.insertDB("Tareas muchas jajajajajajaja",0);
         dbManager.insertDB("Materiales", 1);
 
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
