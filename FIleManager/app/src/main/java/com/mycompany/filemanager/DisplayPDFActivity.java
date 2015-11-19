@@ -1,11 +1,15 @@
 package com.mycompany.filemanager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.mycompany.filemanager.General.FileM;
+import com.mycompany.filemanager.General.FileManagerBackend;
 
 public class DisplayPDFActivity extends Activity {
 
@@ -13,10 +17,18 @@ public class DisplayPDFActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_pdf);
+        getActionBar().hide();
+
+        Intent intent = getIntent();
+        int position = intent.getIntExtra("position", -1);
+
+        FileM fileM = FileManagerBackend.getInstance().getFileM(position);
 
         WebView mWebView = (WebView)findViewById(R.id.webview);
+        mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new WebViewClient());
-        mWebView.loadUrl("https://docs.google.com/gview?embedded=true&url="+ "prentcsmacro.sty");
+        mWebView.loadUrl("https://docs.google.com/gview?embedded=true&url="+ fileM.getURL());
+
     }
 
     @Override

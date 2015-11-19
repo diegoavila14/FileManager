@@ -54,8 +54,13 @@ public class CustomGridFiles extends BaseAdapter {
             grid.setLayoutParams(new GridView.LayoutParams(250, 210));
             //grid.setScaleType(ImageView.ScaleType.CENTER_CROP);
             grid.setPadding(8, 8, 8, 8);
-            imageView.setImageResource(R.drawable.image_icon);
             final FileM fileM = files.get(position);
+            if (fileM.getIs_image() == 1){
+                imageView.setImageResource(R.drawable.image_icon);
+            }
+            else{
+                imageView.setImageResource(R.drawable.file_icon);
+            }
             textView.setText(fileM.getName());
         } else {
             grid = convertView;

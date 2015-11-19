@@ -83,13 +83,18 @@ public class DataBaseManager2 {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                FileM fileM = new FileM(cursor.getString(5));
-                String path = cursor.getString(3);
-                String filename = cursor.getString(4);
+                FileM fileM = new FileM(cursor.getString(5),cursor.getInt(6));
 
-                Bitmap b = Tool.loadImageFromStorage(cursor.getString(4), cursor.getString(3)); //(filename, folder_path)
-                fileM.setImage(b);
-                fileM.setIs_image(cursor.getInt(6));
+                if (fileM.getIs_image() == 1){
+                    Bitmap b = Tool.loadImageFromStorage(cursor.getString(4), cursor.getString(3)); //(filename, folder_path)
+                    fileM.setImage(b);
+                }
+                else{
+                    String ah = cursor.getString(3);
+                    fileM.setURL(ah);
+                }
+
+
 
                 files.add(fileM);
 

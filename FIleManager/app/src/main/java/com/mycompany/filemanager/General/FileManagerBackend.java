@@ -68,7 +68,7 @@ public class FileManagerBackend {
 
     public void prueba()
     {
-        dbManager.insertDB("Tareas muchas jajajajajajaja",0);
+        dbManager.insertDB("Tareas",0);
         dbManager.insertDB("Materiales", 1);
 
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
@@ -94,6 +94,9 @@ public class FileManagerBackend {
         String path3 = Tool.saveToInternalStorage(bitmap3,"hola3");
 
         dbManager2.insertDB(2, 1, path3, "hola3.jpg", "IMAGE_3",1);
+
+        dbManager2.insertDB(3,1,"http://www.adobe.com/content/dam/Adobe/en/devnet/acrobat/pdfs/pdf_open_parameters.pdf",""
+                ,"PDFPrueba",0);
     }
 
     public void proccessFolder(cl.medapp.medappwebapi.Folder folder)
@@ -102,6 +105,7 @@ public class FileManagerBackend {
         dbManager.insertDB(folder.getName(),id_folder);
 
         for (Document doc: folder.getDocuments()) {
+            //TODO (Diego) Si el doc no es una imagen no tiene que setearse el bitmap. El path tiene que cambiarse y ser la URL
             Bitmap bitmap = doc.getImage();
             int id_doc = 100+doc.getName().length();
             String filename = Integer.toString(id_doc)+"_doc";
