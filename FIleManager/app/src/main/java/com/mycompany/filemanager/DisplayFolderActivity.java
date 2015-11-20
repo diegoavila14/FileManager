@@ -46,7 +46,6 @@ public class DisplayFolderActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id)
             {
-                Toast.makeText(DisplayFolderActivity.this, "" + position,Toast.LENGTH_SHORT).show();
 
                 FileM fileM = FileManagerBackend.getInstance().getFileM(position);
 

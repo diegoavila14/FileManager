@@ -3,6 +3,8 @@ package com.mycompany.filemanager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,8 +57,6 @@ public class mainActivity extends Activity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Toast.makeText(mainActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
 
                 //Folder folder = FileManagerBackend.getInstance().getFolder(position);
 
@@ -83,6 +83,13 @@ public class mainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_update) {
+
+            if ( !hasInternetConnection() )
+            {
+                Toast.makeText(getApplicationContext(),"Error: No hay conexión a internet.",Toast.LENGTH_LONG).show();
+                return false;
+            }
+
             progressBar.setVisibility(View.VISIBLE);
 
             api.getPatientHospitalization(new OnTaskCompleted<Patient>() {
@@ -122,5 +129,20 @@ public class mainActivity extends Activity {
 
     public static Context getAppContext() {
         return mainActivity.context;
+    }
+
+    private boolean hasInternetConnection()
+    {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = false;
+        if (activeNetwork != null)
+        {
+
+            isConnected = activeNetwork.isConnectedOrConnecting();
+        }
+        return isConnected;
     }
 }

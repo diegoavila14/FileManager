@@ -31,7 +31,7 @@ public class FileManagerBackend {
         dbManager2 = new DataBaseManager2(c);
 
         //SOLO PARA PRUEBA
-        prueba();
+        //prueba();
     }
 
     public Folder getFolder(int index)
@@ -101,16 +101,16 @@ public class FileManagerBackend {
 
     public void proccessFolder(cl.medapp.medappwebapi.Folder folder)
     {
-        int id_folder = 100 + folder.getName().length();
-        dbManager.insertDB(folder.getName(),id_folder);
+        dbManager.insertDB(folder.getName(),folder.getId());
 
         for (Document doc: folder.getDocuments()) {
-            //TODO (Diego) Si el doc no es una imagen no tiene que setearse el bitmap. El path tiene que cambiarse y ser la URL
+            //TODO (Diego) Si el doc no es una imagen no tiene que setearse el bitmap. El path tiene que cambiarse y ser la URL y el 1
+            //cambiarse por 0
             Bitmap bitmap = doc.getImage();
-            int id_doc = 100+doc.getName().length();
+            int id_doc = doc.getId();
             String filename = Integer.toString(id_doc)+"_doc";
             String path = Tool.saveToInternalStorage(bitmap,filename);
-            dbManager2.insertDB(id_doc,id_folder,path,filename,doc.getName(),1);
+            dbManager2.insertDB(id_doc,folder.getId(),path,filename,doc.getName(),1);
         }
     }
 }
