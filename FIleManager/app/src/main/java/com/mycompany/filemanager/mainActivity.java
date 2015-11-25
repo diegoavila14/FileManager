@@ -47,6 +47,7 @@ public class mainActivity extends Activity {
         mainActivity.context = getApplicationContext();
         fileManagerBackend = FileManagerBackend.getInstance();
 
+
         GridView gridview = (GridView) findViewById(R.id.gridview);
         CustomGrid adapter = new CustomGrid(mainActivity.this, fileManagerBackend.getFolders() );
         gridview.setAdapter(adapter);

@@ -5,11 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 import com.mycompany.filemanager.DataBase.DataBaseManager;
-import com.mycompany.filemanager.DataBase.DataBaseManager2;
 import com.mycompany.filemanager.mainActivity;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import cl.medapp.medappwebapi.Document;
@@ -21,17 +18,15 @@ public class FileManagerBackend {
 
     private static FileManagerBackend INSTANCE;
     private DataBaseManager dbManager;
-    private DataBaseManager2 dbManager2;
     private List<Folder> folders;
     private List<FileM> files_temp;
 
     private FileManagerBackend(Context c)
     {
         dbManager = new DataBaseManager(c);
-        dbManager2 = new DataBaseManager2(c);
 
         //SOLO PARA PRUEBA
-        //prueba();
+        prueba();
     }
 
     public Folder getFolder(int index)
@@ -62,7 +57,7 @@ public class FileManagerBackend {
 
     public List<FileM> getFiles(int id_folder)
     {
-        files_temp = dbManager2.getDBFiles(id_folder);
+        files_temp = dbManager.getDBFiles(id_folder);
         return files_temp;
     }
 
@@ -77,7 +72,7 @@ public class FileManagerBackend {
 
         String path = Tool.saveToInternalStorage(bitmap, "hola");
 
-        dbManager2.insertDB(0, 0, path, "hola.jpg", "IMAGE_1",1);
+        dbManager.insertDB(0, 0, path, "hola.jpg", "IMAGE_1",1);
 
         Bitmap.Config conf2 = Bitmap.Config.ARGB_8888;
         Bitmap bitmap2 = Bitmap.createBitmap(100, 100, conf2);
@@ -85,7 +80,7 @@ public class FileManagerBackend {
 
         String path2 = Tool.saveToInternalStorage(bitmap2,"hola2");
 
-        dbManager2.insertDB(1, 0, path2, "hola2.jpg", "IMAGE_2",1);
+        dbManager.insertDB(1, 0, path2, "hola2.jpg", "IMAGE_2",1);
 
         Bitmap.Config conf3 = Bitmap.Config.ARGB_8888;
         Bitmap bitmap3 = Bitmap.createBitmap(100, 100, conf3);
@@ -93,9 +88,9 @@ public class FileManagerBackend {
 
         String path3 = Tool.saveToInternalStorage(bitmap3,"hola3");
 
-        dbManager2.insertDB(2, 1, path3, "hola3.jpg", "IMAGE_3",1);
+        dbManager.insertDB(2, 1, path3, "hola3.jpg", "IMAGE_3",1);
 
-        dbManager2.insertDB(3,1,"http://www.adobe.com/content/dam/Adobe/en/devnet/acrobat/pdfs/pdf_open_parameters.pdf",""
+        dbManager.insertDB(3,1,"http://www.adobe.com/content/dam/Adobe/en/devnet/acrobat/pdfs/pdf_open_parameters.pdf",""
                 ,"PDFPrueba",0);
     }
 
@@ -110,7 +105,12 @@ public class FileManagerBackend {
             int id_doc = doc.getId();
             String filename = Integer.toString(id_doc)+"_doc";
             String path = Tool.saveToInternalStorage(bitmap,filename);
-            dbManager2.insertDB(id_doc,folder.getId(),path,filename,doc.getName(),1);
+            dbManager.insertDB(id_doc,folder.getId(),path,filename,doc.getName(),1);
         }
+    }
+
+    public void resetTables()
+    {
+        dbManager.resetTables();
     }
 }
