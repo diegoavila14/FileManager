@@ -33,6 +33,8 @@ public class mainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getActionBar().hide();
+
         apiComunicator = new ApiComunicator(this.getApplicationContext());
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
