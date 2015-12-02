@@ -28,6 +28,9 @@ public class DisplayPDFActivity extends Activity {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.loadUrl("https://docs.google.com/gview?embedded=true&url="+ fileM.getURL());
+        mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setSupportZoom(true);
+        mWebView.getSettings().setDisplayZoomControls(true);
 
     }
 

@@ -42,7 +42,7 @@ public class Tool {
     {
         Bitmap b = null;
         try {
-            File f=new File(folder_path, filename+".jpg");
+            File f = new File(folder_path, filename);
             b = BitmapFactory.decodeStream(new FileInputStream(f));
         }
         catch (FileNotFoundException e)

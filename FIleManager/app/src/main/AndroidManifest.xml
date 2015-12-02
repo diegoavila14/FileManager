@@ -10,16 +10,24 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <receiver android:name=".Broadcast.SingOutReceiver">
+            <intent-filter>
+                <action android:name="com.medapp.DELETE_CONTACT_DB">
+                </action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".Broadcast.NewFileReceiver">
+            <intent-filter>
+                <action android:name="cl.medapp.launcher.DOCUMENT_UPDATE">
+                </action>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".mainActivity"
             android:label="@string/app_name" >
-
-            <receiver android:name=".Broadcast.SingOutReceiver">
-                <intent-filter>
-                    <action android:name="com.medapp.DELETE_CONTACT_DB">
-                    </action>
-                </intent-filter>
-            </receiver>
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

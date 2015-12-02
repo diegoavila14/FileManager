@@ -142,7 +142,9 @@ public class DataBaseManager {
                 FileM fileM = new FileM(cursor.getString(5),cursor.getInt(6));
 
                 if (fileM.getIs_image() == 1){
-                    Bitmap b = Tool.loadImageFromStorage(cursor.getString(4), cursor.getString(3)); //(filename, folder_path)
+                    String aux = cursor.getString(4);
+                    String aux2 = cursor.getString(3);
+                    Bitmap b = Tool.loadImageFromStorage(aux, aux2); //(filename, folder_path)
                     fileM.setImage(b);
                 }
                 else{

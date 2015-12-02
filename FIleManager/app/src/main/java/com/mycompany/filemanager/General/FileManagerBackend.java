@@ -26,7 +26,7 @@ public class FileManagerBackend {
         dbManager = new DataBaseManager(c);
 
         //SOLO PARA PRUEBA
-        prueba();
+        //prueba();
     }
 
     public Folder getFolder(int index)
@@ -92,25 +92,5 @@ public class FileManagerBackend {
 
         dbManager.insertDB(3,1,"http://www.adobe.com/content/dam/Adobe/en/devnet/acrobat/pdfs/pdf_open_parameters.pdf",""
                 ,"PDFPrueba",0);
-    }
-
-    public void proccessFolder(cl.medapp.medappwebapi.Folder folder)
-    {
-        dbManager.insertDB(folder.getName(),folder.getId());
-
-        for (Document doc: folder.getDocuments()) {
-            //TODO (Diego) Si el doc no es una imagen no tiene que setearse el bitmap. El path tiene que cambiarse y ser la URL y el 1
-            //cambiarse por 0
-            Bitmap bitmap = doc.getImage();
-            int id_doc = doc.getId();
-            String filename = Integer.toString(id_doc)+"_doc";
-            String path = Tool.saveToInternalStorage(bitmap,filename);
-            dbManager.insertDB(id_doc,folder.getId(),path,filename,doc.getName(),1);
-        }
-    }
-
-    public void resetTables()
-    {
-        dbManager.resetTables();
     }
 }

@@ -14,24 +14,17 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.mycompany.filemanager.General.ApiComunicator;
 import com.mycompany.filemanager.General.CustomGrid;
 import com.mycompany.filemanager.General.FileManagerBackend;
 
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import cl.medapp.medappwebapi.Folder;
-import cl.medapp.medappwebapi.MedappApi;
-import cl.medapp.medappwebapi.OnTaskCompleted;
-import cl.medapp.medappwebapi.Patient;
 
 public class mainActivity extends Activity {
 
     private static Context context;
     private FileManagerBackend fileManagerBackend;
-    private MedappApi api;
+    private ApiComunicator apiComunicator;
 
     private ProgressBar progressBar;
 
@@ -40,7 +33,7 @@ public class mainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        api = new MedappApi(this);
+        apiComunicator = new ApiComunicator(this.getApplicationContext());
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
 
@@ -48,18 +41,20 @@ public class mainActivity extends Activity {
         fileManagerBackend = FileManagerBackend.getInstance();
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         GridView gridview = (GridView) findViewById(R.id.gridview);
         CustomGrid adapter = new CustomGrid(mainActivity.this, fileManagerBackend.getFolders() );
         gridview.setAdapter(adapter);
-
-        //gridview.setAdapter(new CustomGrid(this));
 
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-
-                //Folder folder = FileManagerBackend.getInstance().getFolder(position);
 
                 Intent intent = new Intent(mainActivity.getAppContext(), DisplayFolderActivity.class);
                 intent.putExtra("folder_position", position);
@@ -91,37 +86,7 @@ public class mainActivity extends Activity {
                 return false;
             }
 
-            progressBar.setVisibility(View.VISIBLE);
-
-            api.getPatientHospitalization(new OnTaskCompleted<Patient>() {
-                @Override
-                public void onTaskCompleted(Patient patient) {
-
-                    api.getPatientFolders(patient, new OnTaskCompleted<List<Folder>>() {
-                        @Override
-                        public void onTaskCompleted(List<Folder> folders) {
-                            int n_documents = 0;
-                            for (Folder folder : folders ) {
-                                n_documents += folder.getDocuments().size();
-                                FileManagerBackend.getInstance().proccessFolder(folder);
-                            }
-                            String msg;
-                            switch (n_documents) {
-                                case 1:
-                                    msg = "1 documento actualizado";
-                                    break;
-                                default:
-                                    msg = n_documents+" documentos actualizados";
-                            }
-                            GridView gridview = (GridView) findViewById(R.id.gridview);
-                            CustomGrid adapter = new CustomGrid(mainActivity.this, fileManagerBackend.getFolders() );
-                            gridview.setAdapter(adapter);
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(mainActivity.getAppContext(),msg,Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            });
+            apiComunicator.update();
             return true;
         }
 
