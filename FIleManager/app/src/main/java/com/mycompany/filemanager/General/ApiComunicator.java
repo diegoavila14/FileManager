@@ -43,7 +43,7 @@ public class ApiComunicator {
                     @Override
                     public void onTaskCompleted(List<cl.medapp.medappwebapi.Folder> folders) {
                         int n_documents = 0;
-                        for (cl.medapp.medappwebapi.Folder folder : folders ) {
+                        for (cl.medapp.medappwebapi.Folder folder : folders) {
                             n_documents += folder.getDocuments().size();
                             proccessFolder(folder);
                         }
@@ -53,7 +53,7 @@ public class ApiComunicator {
                                 msg = "1 documento actualizado";
                                 break;
                             default:
-                                msg = n_documents+" documentos actualizados";
+                                msg = n_documents + " documentos actualizados";
                         }
                         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
                     }
@@ -93,11 +93,18 @@ public class ApiComunicator {
         for (Document doc: folder.getDocuments()) {
             //TODO (Diego) Si el doc no es una imagen no tiene que setearse el bitmap. El path tiene que cambiarse y ser la URL y el 1 debe ser 0
             //cambiarse por 0
-            Bitmap bitmap = doc.getImage();
             int id_doc = doc.getId();
             String filename = Integer.toString(id_doc)+"_doc";
-            String path = Tool.saveToInternalStorage(bitmap,filename);
-            dbManager.insertDB(id_doc,folder.getId(),path,filename+".jpg",doc.getName(),1);
+            if (doc.getImage() != null)
+            {
+                Bitmap bitmap = doc.getImage();
+                String path = Tool.saveToInternalStorage(bitmap, filename);
+                dbManager.insertDB(id_doc,folder.getId(),path,filename+".jpg",doc.getName(),1);
+            }
+            else
+            {
+                dbManager.insertDB(id_doc,folder.getId(),doc.getUrl(),filename,doc.getName(),0);
+            }
         }
     }
 
