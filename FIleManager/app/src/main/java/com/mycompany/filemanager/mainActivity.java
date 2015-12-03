@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mycompany.filemanager.General.ApiComunicator;
@@ -27,6 +28,7 @@ public class mainActivity extends Activity {
     private ApiComunicator apiComunicator;
 
     private ProgressBar progressBar;
+    private TextView textView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class mainActivity extends Activity {
 
         mainActivity.context = getApplicationContext();
         fileManagerBackend = FileManagerBackend.getInstance();
+
+        textView = (TextView) findViewById(R.id.text);
 
 
     }
@@ -63,6 +67,11 @@ public class mainActivity extends Activity {
                 startActivity(intent);
             }
         });
+
+        if ( apiComunicator.getPreference() )
+        {
+            textView.setVisibility(View.GONE);
+        }
     }
 
     @Override

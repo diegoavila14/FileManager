@@ -1,6 +1,7 @@
 package com.mycompany.filemanager.General;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.GridView;
@@ -22,6 +23,7 @@ public class ApiComunicator {
     MedappApi api;
     DataBaseManager dbManager;
     Context context;
+    private static final String PREFS_DATE = "pref_date";
 
     public ApiComunicator(Context context) {
         this.api = new MedappApi(context);
@@ -31,6 +33,8 @@ public class ApiComunicator {
 
     public void update()
     {
+        setSharePreference();
+
         api.getPatientHospitalization(new OnTaskCompleted<Patient>() {
             @Override
             public void onTaskCompleted(Patient patient) {
@@ -58,6 +62,30 @@ public class ApiComunicator {
         });
     }
 
+    private void setSharePreference()
+    {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_DATE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("hasUpdated", true);
+        editor.commit();
+    }
+
+    private void resetSharePreference()
+    {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_DATE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("hasUpdated", false);
+        editor.commit();
+    }
+
+    public Boolean getPreference()
+    {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_DATE, 0);
+        Boolean updated = settings.getBoolean("hasUpdated", false);
+
+        return updated;
+    }
+
     private void proccessFolder(Folder folder)
     {
         dbManager.insertDB(folder.getName(), folder.getId());
@@ -76,5 +104,6 @@ public class ApiComunicator {
     public void resetTables()
     {
         dbManager.resetTables();
+        resetSharePreference();
     }
 }
